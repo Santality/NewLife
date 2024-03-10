@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
@@ -120,7 +121,9 @@ class UserController extends Controller
         $startDate = Auth::user()->created_at;
         $currentDate = Carbon::now();
         $daysPassed = $startDate->diffInDays($currentDate);
-        return view('profile', ['daysPassed'=>$daysPassed]);
+        $posts = Post::where('id_user', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(3);
+        $find = Post::where('id_user', Auth::user()->id)->where('status', 2)->get();
+        return view('profile', ['daysPassed'=>$daysPassed, 'posts' => $posts, 'find' => $find]);
     }
 
     public function editPhone(Request $request){
@@ -150,5 +153,27 @@ class UserController extends Controller
         $updateInfo->email = $request['email'];
         $updateInfo->save();
         return redirect()->back();
+    }
+
+    public function addComment(Request $request){
+        $request->validate([
+            "photo" => "required",
+            "comment_text" => "required",
+        ], [
+                "photo.required" => "Поле обязательно для заполнения",
+                "comment_text.required" => "Поле обязательно для заполнения",
+            ]
+        );
+
+        $photo = $request->file('photo');
+        $name = $photo->hashName();
+        $patch = $photo->store('public/images');
+        Comment::create([
+            "photo" => $name,
+            "comment_text" => $request['comment_text'],
+            "id_user" => Auth::user()->id,
+        ]);
+
+        return redirect('/');
     }
 }

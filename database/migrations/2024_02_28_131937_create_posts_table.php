@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('find_date');
             $table->foreignId('status')->references('id')->on('statuses');
             $table->string('photo');
+            $table->foreignId('id_user')->nullable()->references('id')->on('users');
             $table->timestamps();
         });
     }

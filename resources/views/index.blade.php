@@ -148,38 +148,54 @@
         <section id="comm">
             <h2 class="mt-5">Отзывы</h2>
             <div class="row">
+                @foreach ($comments as $comment)
                 <div class="col-md-4">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">Алексей</h5>
-                            <img src="/img/rewiew1.jpg" class="card-img-top" alt="Фото животного 1">
-                            <p class="card-text">Наконец-то нашел своего пушистика</p>
-                            <p class="card-text"><small class="text-muted">23.01.2024</small></p>
+                            <h5 class="card-title">{{$comment->user->name}}</h5>
+                            <img src="/storage/images/{{$comment->photo}}" class="card-img-top" alt="{{$comment->photo}}">
+                            <p class="card-text">{{$comment->comment_text}}</p>
+                            <p class="card-text"><small class="text-muted">{{$comment->created_at}}</small></p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Даня</h5>
-                            <img src="/img/rewiew2.jpg" class="card-img-top" alt="Фото животного 2">
-                            <p class="card-text">Нашел своего джунгарского хомячка благодаря объявлению, оказалось он в канализацию упал</p>
-                            <p class="card-text"><small class="text-muted">03.02.2024</small></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Игорь</h5>
-                            <img src="/img/rewiew3.jpg" class="card-img-top" alt="Фото животного 3">
-                            <p class="card-text">Спасибо огромное!!!!</p>
-                            <p class="card-text"><small class="text-muted">15.01.2024</small></p>
-                        </div>
-                    </div>
-                </div>
+                @endforeach
             </div>
+            <div class="mt-3">{{ $comments->withQueryString()->links('pagination::bootstrap-5') }}</div>
         </section>
+        @auth
+        <section id="comm_create">
+            <h2 class="mt-5">Добавить отзыв</h2>
+            <form method="POST" action="/addComment" enctype="multipart/form-data">
+                @csrf
+                <div class="mb-3">
+                    <label for="comment_text" class="form-label">Текст отзыва</label>
+                    <input type="text" class="form-control" id="comment_text" name="comment_text">
+                    @error('comment_text')
+                        <div class="alert alert-danger alert-dismissible">
+                            <div class="alert-text">
+                                {{ $message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        </div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Фото животного</label>
+                    <input type="file" class="form-control" id="photo" name="photo">
+                    @error('photo')
+                        <div class="alert alert-danger alert-dismissible">
+                            <div class="alert-text">
+                                {{ $message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        </div>
+                    @enderror
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </section>
+        @endauth
     </div>
     <x-footer></x-footer>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

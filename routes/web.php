@@ -52,3 +52,11 @@ Route::post('/findPost', [PostController::class, 'findPost']);
 Route::get('/detailPost/{id}', [PostController::class, 'detailPost']);
 
 Route::get('/logout', [UserController::class, 'logout']);
+
+Route::post('/addComment', [UserController::class, 'addComment']);
+
+Route::get('/postDelete/{id}', [PostController::class, 'postDelete']);
+
+Route::get('/postEdit/{id}', [PostController::class, 'postEdit']);
+
+Route::post('/updatePost', [PostController::class, 'updatePost']);

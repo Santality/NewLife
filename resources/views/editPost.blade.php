@@ -17,40 +17,15 @@
 <body>
     <x-header></x-header>
     <div class="container">
-        <h2 class="mt-3">Добавить объявление</h2>
-        <form action="/storePost" method="post" enctype="multipart/form-data">
+        <h2 class="mt-3">Изменить объявление</h2>
+        <form action="/updatePost" method="post" enctype="multipart/form-data">
             @csrf
-            @guest
-            <div class="mb-3">
-                <label for="email" class="form-label">E-mail человека, нашедшего животное</label>
-                <input type="email" class="form-control" id="email" name="email">
-                @error('email')
-                    <div class="alert alert-danger alert-dismissible">
-                        <div class="alert-text">
-                            {{ $message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    </div>
-                @enderror
-            </div>
-            <div class="mb-3">
-                <label for="phone" class="form-label">Телефон человека, нашедшего животное</label>
-                <input type="tel" class="form-control" id="phone" name="phone">
-                @error('phone')
-                    <div class="alert alert-danger alert-dismissible">
-                        <div class="alert-text">
-                            {{ $message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    </div>
-                @enderror
-            </div>
-            @endguest
+            <input type="hidden" name="id" value="{{$post->id}}">
             <div class="mb-3">
                 <label for="kind" class="form-label">Вид животного</label>
                 <select class="form-select" name="kind" id="kind">
                     @foreach ($kinds as $kind)
-                    <option value="{{$kind->id}}">{{$kind->title_kind}}</option>
+                    <option {{($kind->id == $post->kind)?'selected':''}} value="{{$kind->id}}">{{$kind->title_kind}}</option>
                     @endforeach
                 </select>
                 @error('kind')
@@ -76,7 +51,7 @@
               </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Дополнительная информация</label>
-                <input type="text" class="form-control" id="description" name="description">
+                <input type="text" value="{{$post->description}}" class="form-control" id="description" name="description">
                 @error('description')
                     <div class="alert alert-danger alert-dismissible">
                         <div class="alert-text">
@@ -88,7 +63,7 @@
             </div>
             <div class="mb-3">
                 <label for="mark" class="form-label">Клеймо</label>
-                <input type="text" class="form-control" id="mark" name="mark" placeholder="Если есть">
+                <input type="text" value="{{$post->mark}}" class="form-control" id="mark" name="mark" placeholder="Если есть">
                 @error('mark')
                     <div class="alert alert-danger alert-dismissible">
                         <div class="alert-text">
@@ -102,7 +77,7 @@
                 <label for="area" class="form-label">Район</label>
                 <select class="form-select" name="area" id="area">
                     @foreach ($areas as $area)
-                    <option value="{{$area->id}}">{{$area->title_area}}</option>
+                    <option {{($kind->id == $post->kind)?'selected':''}} value="{{$area->id}}">{{$area->title_area}}</option>
                     @endforeach
                 </select>
                 @error('area')
@@ -116,7 +91,7 @@
             </div>
             <div class="mb-3">
                 <label for="find_date" class="form-label">Дата нахождения</label>
-                <input type="date" class="form-control" id="find_date" name="find_date">
+                <input type="date" value="{{$post->find_date}}" class="form-control" id="find_date" name="find_date">
                 @error('find_date')
                     <div class="alert alert-danger alert-dismissible">
                         <div class="alert-text">
@@ -130,7 +105,7 @@
                 <input type="checkbox" class="form-check-input" id="agreement" name="agreement" required>
                 <label class="form-check-label" for="agreement">Я согласен на обработку персональных данных</label>
             </div>
-            <button type="submit" class="btn btn-primary">Опубликовать</button>
+            <button type="submit" class="btn btn-primary">Изменить</button>
         </form>
     </div>
 </body>

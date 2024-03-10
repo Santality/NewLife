@@ -18,7 +18,8 @@ class Post extends Model
         'area',
         'find_date',
         'status',
-        'photo'
+        'photo',
+        'id_user'
     ];
 
     public function kinds()
